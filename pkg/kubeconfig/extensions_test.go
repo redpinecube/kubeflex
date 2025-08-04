@@ -400,3 +400,17 @@ func TestCountKubeflexControlPlaneContextsMultiple(t *testing.T) {
 		t.Errorf("Expected %d control plane context(s), got %d", expected, got)
 	}
 }
+
+func TestCheckExtensionInitialContextNameSetFalse(t *testing.T) {
+	kconf := api.NewConfig()
+	ext := NewRuntimeKubeflexExtension()
+
+	kconf.Extensions = map[string]runtime.Object{
+		ExtensionKubeflexKey: ext,
+	}
+
+	status := CheckExtensionInitialContextNameSet(*kconf)
+	if status != DiagnosisStatusWarning {
+		t.Errorf("Expected %s when ExtensionInitialContextName is not set, got %s", DiagnosisStatusWarning, status)
+	}
+}
